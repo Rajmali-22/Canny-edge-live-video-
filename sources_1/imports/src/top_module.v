@@ -115,18 +115,19 @@ module top_module(
     // Active display area condition (when sync signals are active high)
     wire active_video = vga_out_vs & vga_out_hs;
 
-    // Canny / Sobel Edge Detector Module
+    // Canny / Sobel Edge Detector Module with Dynamic Threshold Control
     canny_sobel_edge_detector m4 (
         .clk(clk_vga),
         .rst_n(rst_n),
         .sw_canny(sw_canny),         // Switch R7 input
+        .key_threshold(key[3:2]),    // key[3] increases threshold, key[2] decreases threshold
         .video_on(active_video),     // Active display area
         .raw_r(raw_vga_r),
         .raw_g(raw_vga_g),
         .raw_b(raw_vga_b),
-        .out_r(vga_out_r),           // Connects to top module output pin
-        .out_g(vga_out_g),           // Connects to top module output pin
-        .out_b(vga_out_b)            // Connects to top module output pin
+        .out_r(vga_out_r),
+        .out_g(vga_out_g),
+        .out_b(vga_out_b)
     );
 
     // ERROR APPEARS IF ODDR2 IS ROUTED INSIDE THE FPGA INSTEAD OF BEING DIRECTLY CONNECTED TO OUTPUT
